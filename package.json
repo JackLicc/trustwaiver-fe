@@ -1,7 +1,8 @@
 {
-  "name": "trustwaiver-fe",
+  "name": "trustwaiver",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "build": "remix vite:build",
     "dev": "remix vite:dev",

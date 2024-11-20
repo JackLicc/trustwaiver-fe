@@ -1,43 +1,35 @@
-FROM node:18-alpine AS base
+FROM node:20.2.0-alpine3.18 AS base
 
-# Install dependencies only when needed
 FROM base AS deps
-# Check https://github.com/nodejs/docker-node/tree/b4117f9333da4138b03a546ec926ef50a31506c3#nodealpine to understand why libc6-compat might be needed.
-RUN apk add --no-cache libc6-compat
 WORKDIR /app
-
-# Install dependencies based on the preferred package manager
-COPY package.json yarn.lock* package-lock.json* pnpm-lock.yaml* ./
-RUN \
-    if [ -f yarn.lock ]; then yarn --frozen-lockfile; \
-    elif [ -f package-lock.json ]; then npm ci; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm i --frozen-lockfile; \
-    else echo "Lockfile not found." && exit 1; \
-    fi
+COPY package*.json ./
+RUN npm install
 
 
-# Rebuild the source code only when needed
-FROM base AS builder
+FROM deps AS builder
 WORKDIR /app
-COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+RUN npm run build
 
-RUN \
-    if [ -f yarn.lock ]; then yarn run build; \
-    elif [ -f package-lock.json ]; then npm run build; \
-    elif [ -f pnpm-lock.yaml ]; then corepack enable pnpm && pnpm run build; \
-    else echo "Lockfile not found." && exit 1; \
-    fi
+
+FROM deps AS prod-deps
+WORKDIR /app
+RUN npm install --production
+
 
 FROM base AS runner
 WORKDIR /app
+RUN addgroup --system --gid 1001 remix
+RUN adduser --system --uid 1001 remix
+USER remix
+
+COPY --from=builder --chown=remix:remix /app/server.js ./
+COPY --from=prod-deps --chown=remix:remix /app/package*.json ./
+COPY --from=prod-deps --chown=remix:remix /app/node_modules ./node_modules
+COPY --from=builder --chown=remix:remix /app/build ./build
+COPY --from=builder --chown=remix:remix /app/public ./public
 
 ENV NODE_ENV=production
-
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 remix
-
-COPY --from=builder /app/build ./build
 
 USER remix
 
@@ -45,5 +37,4 @@ EXPOSE 3000
 
 ENV PORT=3000
 
-ENV HOSTNAME="0.0.0.0"
 CMD ["node", "server.js"]
