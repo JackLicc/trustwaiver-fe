@@ -3,7 +3,15 @@ import {
   Meta,
   Outlet,
   Scripts,
-} from "@remix-run/react";
+} from "@remix-run/react"
+
+import Header from "./components/Header";
+
+import styles from "./styles/tailwind.css?url";
+
+export const links = () => [
+  { rel: "stylesheet", href: styles },
+];
 
 export default function App() {
   return (
@@ -17,9 +25,8 @@ export default function App() {
         <Links />
       </head>
       <body>
-        <h1>Hello world!</h1>
+        <Header />
         <Outlet />
-
         <Scripts />
       </body>
     </html>
