@@ -7,8 +7,8 @@ export default function Component() {
   const isActive = (path) => location.pathname === path;
 
   return (
-    <div className="mx-auto bg-[#3c3c3c]">
-      <header className="flex h-14 w-full items-center px-4 md:px-6 lg:px-8 space-x-20 mb-[1.25rem]">
+    <div className="mx-auto bg-slate-800">
+      <header className="flex h-14 w-full items-center px-4 md:px-6 lg:px-8 space-x-2">
         <Link to="/" className="mr-6 lg:flex items-center" prefetch="none">
           <img src={logo} alt="TrustWaiver" className="h-8 w-8" />
           <span className="ml-2 text-lg font-bold text-primary text-[#150E00]">

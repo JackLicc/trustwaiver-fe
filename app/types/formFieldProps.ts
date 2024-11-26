@@ -1,6 +1,7 @@
 export interface FormFieldTplProps {
   type: string;
-  label: string;
+  icon: any;
+  name: string;
 }
 
 export interface BaseFormFieldProps {

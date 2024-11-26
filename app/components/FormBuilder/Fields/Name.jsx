@@ -93,6 +93,14 @@ export function AttributesComponent({ field, handleChange, onDone, onRemove }) {
   );
 }
 
+export function tplField() {
+  return {
+    type: "name",
+    name: "Name",
+    icon: ContactRound,
+  };
+}
+
 // isNew is set to false by default
 export function defaultField() {
   return {

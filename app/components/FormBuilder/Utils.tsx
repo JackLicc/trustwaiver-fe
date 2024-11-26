@@ -1,17 +1,17 @@
 import TextFieldView from "./Fields/Text";
 import { newField as newTextField } from "./Fields/Text";
-import { TplComponent as TextFieldTplView } from "./Fields/Text";
+import { tplField as textTplField } from "./Fields/Text";
 
 import NameFieldView from "./Fields/Name";
 import { newField as newNameField } from "./Fields/Name";
-import { TplComponent as NameFieldTplView } from "./Fields/Name";
+import { tplField as nameTplField } from "./Fields/Name";
 
 import AddressFieldView from "./Fields/Address";
 import { newField as newAddressField } from "./Fields/Address";
-import { TplComponent as AddressFieldTplView } from "./Fields/Address";
+import { tplField as addressTplField } from "./Fields/Address";
 
 
-import { FormFieldProps } from "~/types/formFieldProps";
+import { FormFieldProps, FormFieldTplProps } from "~/types/formFieldProps";
 
 export function getNewFieldByType(type: string): FormFieldProps | null {
     switch (type) {
@@ -39,15 +39,31 @@ export function getFieldView(field: FormFieldProps) {
     }
 }
 
-export function getFieldTplView(type: string) {
+export function getFieldTplView(type: string | null) {
+    let tf: FormFieldTplProps | null = null;
+
     switch (type) {
         case "name":
-            return <NameFieldTplView />;
+            tf = nameTplField();
+            break;
         case "text":
-            return <TextFieldTplView />;
+            tf = textTplField();
+            break;
         case "address":
-            return <AddressFieldTplView />;
+            tf = addressTplField();
+            break;
         default:
-            return null;
+            tf = null;
     }
+
+    if (!tf) {
+        return <></>;
+    }
+
+    return (
+        <div className="flex items-center px-4 py-3 font-light bg-slate-50 text- rounded">
+            <tf.icon className="mr-5" />
+            <span>{tf.name}</span>
+        </div>
+    );
 }

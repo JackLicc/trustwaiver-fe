@@ -116,6 +116,14 @@ export function AttributesComponent({ field, handleChange, onDone, onRemove }) {
   );
 }
 
+export function tplField() {
+  return {
+    type: "address",
+    name: "Address",
+    icon: MapPinned,
+  };
+}
+
 // isNew is set to false by default
 export function defaultField() {
   return {

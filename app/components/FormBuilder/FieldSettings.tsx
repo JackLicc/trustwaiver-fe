@@ -15,7 +15,7 @@ const FieldSettings: React.FC<FieldSettingsProps> = memo(({ field, onUpdateField
 
     if (!field) {
         return (
-            <div className="w-1/4 bg-gray-100 p-4">
+            <div className="w-full bg-gray-100 p-4">
                 <h2 className="text-lg font-bold mb-4">Field Settings</h2>
                 <p>Select a field to edit its settings</p>
             </div>
@@ -23,7 +23,7 @@ const FieldSettings: React.FC<FieldSettingsProps> = memo(({ field, onUpdateField
     }
 
     return (
-        <div className="w-1/4 bg-gray-100 p-4">
+        <div className="w-full bg-gray-100 p-4">
             <h2 className="text-lg font-bold mb-4">Field Settings</h2>
             <div className="mb-4">
                 <label className="block mb-2">Field Type</label>

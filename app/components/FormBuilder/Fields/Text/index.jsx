@@ -1,6 +1,7 @@
 import React, { useRef, useState } from "react";
 import Editor from "./Editor.client";
 import { nanoid } from "nanoid";
+import { FileType2 } from "lucide-react";
 import "quill/dist/quill.snow.css";
 
 export default function ViewComponent({ field }) {
@@ -16,7 +17,7 @@ export default function ViewComponent({ field }) {
 
   return (
     <>
-      <div dataFieldId={field.id}>
+      <div>
         <Editor
           ref={quillRef}
           readOnly={readOnly}
@@ -53,6 +54,14 @@ export function AttributesComponent({ field, onDone, onRemove }) {
       </div>
     </>
   );
+}
+
+export function tplField() {
+  return {
+    type: "text",
+    name: "Text",
+    icon: FileType2,
+  };
 }
 
 // isNew is set to false by default

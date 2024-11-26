@@ -2,10 +2,11 @@ import React, { useState, useCallback } from 'react';
 import { DndContext, closestCenter, KeyboardSensor, PointerSensor, useSensor, useSensors, DragEndEvent, DragOverEvent } from '@dnd-kit/core';
 import { arrayMove, SortableContext, sortableKeyboardCoordinates, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import FieldPalette from './FieldPalette';
-import FormPreview from './FormPreview';
+import FormCanvas from './FormCanvas';
 import FieldSettings from './FieldSettings';
 import { FormFieldProps } from "~/types/formFieldProps";
 import { getNewFieldByType } from './Utils';
+import { ClientOnly } from "remix-utils/client-only"
 
 const FormBuilder: React.FC = () => {
   const [fields, setFields] = useState<FormFieldProps[]>([]);
@@ -42,7 +43,7 @@ const FormBuilder: React.FC = () => {
       const newField: FormFieldProps = getNewFieldByType(active.id.toString().split('-')[1])!;
 
       setFields((prevFields) => {
-        if (over.id === 'form-preview') {
+        if (over.id === 'form-canvas') {
           return [...prevFields, newField];
         } else {
           const overIndex = prevFields.findIndex((field) => field.id === over.id);
@@ -57,32 +58,36 @@ const FormBuilder: React.FC = () => {
   }, [fields]);
 
   return (
-    <DndContext
-      sensors={sensors}
-      collisionDetection={closestCenter}
-      onDragEnd={handleDragEnd}
-      onDragOver={handleDragOver}
-    >
-      <div className="flex h-screen">
-        <div className="flex-1 bg-white">
-          <FieldPalette />
-        </div>
-        <div className="flex-grow">
-          <SortableContext items={fields} strategy={verticalListSortingStrategy}>
-            <FormPreview
-              fields={fields}
-              onSelectField={setSelectedField}
-            />
-          </SortableContext>
-        </div>
-        <div className="flex-2">
-          <FieldSettings
-            field={selectedField}
-            onUpdateField={setSelectedField}
-          />
-        </div>
-      </div>
-    </DndContext>
+    <ClientOnly>
+      {() => (
+        <DndContext
+          sensors={sensors}
+          collisionDetection={closestCenter}
+          onDragEnd={handleDragEnd}
+          onDragOver={handleDragOver}
+        >
+          <div className="flex h-screen">
+            <div className="bg-slate-100 w-64">
+              <FieldPalette />
+            </div>
+            <div className="flex-grow">
+              <SortableContext items={fields} strategy={verticalListSortingStrategy}>
+                <FormCanvas
+                  fields={fields}
+                  onSelectField={setSelectedField}
+                />
+              </SortableContext>
+            </div>
+            <div className="flex-4">
+              <FieldSettings
+                field={selectedField}
+                onUpdateField={setSelectedField}
+              />
+            </div>
+          </div>
+        </DndContext>
+      )}
+    </ClientOnly>
   );
 };
 

@@ -6,14 +6,14 @@ import { FormFieldProps } from '~/types/formFieldProps';
 import { GripVertical } from 'lucide-react';
 import { getFieldView } from './Utils';
 
-interface FormPreviewProps {
+interface FormCanvasProps {
   fields: FormFieldProps[];
   onSelectField: (field: FormFieldProps) => void;
 }
 
-const FormPreview: React.FC<FormPreviewProps> = ({ fields, onSelectField }) => {
+const FormCanvas: React.FC<FormCanvasProps> = ({ fields, onSelectField }) => {
   const { setNodeRef } = useDroppable({
-    id: 'form-preview',
+    id: 'form-canvas',
   });
 
   return (
@@ -47,6 +47,7 @@ const SortableField: React.FC<SortableFieldProps> = ({ field, onSelect }) => {
   const style = {
     transform: CSS.Transform.toString(transform),
     transition,
+    opacity: isDragging ? 0.5 : 1,
   };
 
   return (
@@ -71,4 +72,4 @@ const SortableField: React.FC<SortableFieldProps> = ({ field, onSelect }) => {
   );
 };
 
-export default FormPreview;
+export default FormCanvas;

@@ -44,8 +44,8 @@ export default function Component() {
   ];
 
   return (
-    <div className="w-full">
-      <div className="pt-0 p-6">
+    <div className="w-full mt-[1.25rem]">
+      <div className="px-4 md:px-6 lg:px-8">
         <div className="flex items-center gap-32">
           <div className="w-72 h-10">
             <SidebarGroup className="py-0">
@@ -56,7 +56,7 @@ export default function Component() {
                 <SidebarInput
                   id="search"
                   placeholder="Keyword search"
-                  className="pl-8 h-10 outline-[0] w-full rounded-3xl"
+                  className="pl-8 h-10 outline-[0] w-full rounded-2xl"
                 />
                 <Search className="pointer-events-none absolute left-2 top-1/2 size-4 -translate-y-1/2 select-none opacity-50" />
               </SidebarGroupContent>
@@ -64,7 +64,7 @@ export default function Component() {
           </div>
           <Link
             to="/template"
-            className="flex items-center h-10 px-4 font-light p-[1.2rem] bg-emerald-500 text-white rounded-3xl hover:bg-emerald-600"
+            className="flex items-center h-10 px-4 font-light p-[1.2rem] bg-primary text-black rounded-lg hover:bg-[#eab308]"
           >
             <Plus className="size-4 mr-2" />
             Create new template
@@ -121,7 +121,7 @@ export default function Component() {
                   <td className="leading-[1.25rem] py-[1rem] px-[0.75rem] text-left">
                     <Link
                       to="/templates/create"
-                      className="flex items-center text-emerald-600 text-[.9rem] hover:underline"
+                      className="flex items-center text-slate-800 text-[.9rem] hover:underline"
                     >
                       <Settings className="size-4 mr-1" /> Settings
                     </Link>
@@ -129,7 +129,7 @@ export default function Component() {
                   <td className="leading-[1.25rem] py-[1rem] px-[0.75rem] text-left">
                     <Link
                       to="/templates/create"
-                      className="flex items-center text-emerald-600 text-[.9rem] hover:underline"
+                      className="flex items-center text-slate-800 text-[.9rem] hover:underline"
                     >
                       <Edit className="size-4 mr-1" /> Edit Template
                     </Link>
