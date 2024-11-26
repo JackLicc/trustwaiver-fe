@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { ContactRound } from "lucide-react";
 import { nanoid } from "nanoid";
 
-export default function ViewComponent(field) {
+export default function ViewComponent({ field }) {
   if (typeof field.id === "undefined") {
     throw new Error("field.id is required");
   }

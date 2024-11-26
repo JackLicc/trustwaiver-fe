@@ -7,8 +7,7 @@
     "**/.client/**/*.ts",
     "**/.client/**/*.tsx",
     "tailwind.config.ts",
-    "vite.config.js",
-    "app/components/Header/index.jsx"
+    "vite.config.js", "app/components/FormBuilder/FieldPalette.tsx", "app/components/FormBuilder/index.tsx",
   ],
   "compilerOptions": {
     "lib": [

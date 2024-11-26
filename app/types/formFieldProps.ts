@@ -1,3 +1,8 @@
+export interface FormFieldTplProps {
+  type: string;
+  label: string;
+}
+
 export interface BaseFormFieldProps {
   id: string; // either a random unique string for new fields or the id of the field from the database
   type: string;

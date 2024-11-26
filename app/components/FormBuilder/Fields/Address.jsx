@@ -2,7 +2,7 @@ import React, { useRef, useState } from "react";
 import { MapPinned } from "lucide-react";
 import { nanoid } from "nanoid";
 
-export default function ViewComponent(field) {
+export default function ViewComponent({ field }) {
   if (typeof field.id === "undefined" || !field.id) {
     throw new Error("field.id is required");
   }
@@ -19,11 +19,6 @@ export default function ViewComponent(field) {
 
   return (
     <div className="flex flex-col space-y-4">
-      <div>
-        <span className="block text-lg font-medium text-gray-700">
-          {field.label}
-        </span>
-      </div>
       <div className="flex space-x-4">
         <input
           type="text"

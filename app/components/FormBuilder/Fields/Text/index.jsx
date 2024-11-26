@@ -1,11 +1,9 @@
 import React, { useRef, useState } from "react";
-import Editor from "./Editor";
+import Editor from "./Editor.client";
 import { nanoid } from "nanoid";
-import { FormFieldProps } from "~/types/formFieldsProps";
+import "quill/dist/quill.snow.css";
 
-const Delta = Quill.import("delta");
-
-export default function ViewComponent(field) {
+export default function ViewComponent({ field }) {
   if (typeof field.id === "undefined" || !field.id) {
     throw new Error("field.id is required");
   }
@@ -17,49 +15,16 @@ export default function ViewComponent(field) {
   const quillRef = useRef();
 
   return (
-    <div dataFieldId={field.id}>
-      <Editor
-        ref={quillRef}
-        readOnly={readOnly}
-        defaultValue={new Delta()
-          .insert("Hello")
-          .insert("\n", { header: 1 })
-          .insert("Some ")
-          .insert("initial", { bold: true })
-          .insert(" ")
-          .insert("content", { underline: true })
-          .insert("\n")}
-        onSelectionChange={setRange}
-        onTextChange={setLastChange}
-      />
-      <div class="controls">
-        <label>
-          Read Only:{" "}
-          <input
-            type="checkbox"
-            value={readOnly}
-            onChange={(e) => setReadOnly(e.target.checked)}
-          />
-        </label>
-        <button
-          className="controls-right"
-          type="button"
-          onClick={() => {
-            alert(quillRef.current?.getLength());
-          }}
-        >
-          Get Content Length
-        </button>
+    <>
+      <div dataFieldId={field.id}>
+        <Editor
+          ref={quillRef}
+          readOnly={readOnly}
+          onSelectionChange={setRange}
+          onTextChange={setLastChange}
+        />
       </div>
-      <div className="state">
-        <div className="state-title">Current Range:</div>
-        {range ? JSON.stringify(range) : "Empty"}
-      </div>
-      <div className="state">
-        <div className="state-title">Last Change:</div>
-        {lastChange ? JSON.stringify(lastChange.ops) : "Empty"}
-      </div>
-    </div>
+    </>
   );
 }
 

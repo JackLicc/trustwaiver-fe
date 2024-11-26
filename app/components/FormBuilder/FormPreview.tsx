@@ -1,71 +1,74 @@
-import React, { useState } from "react";
-import { useDrop } from "react-dnd";
-
-import { getNewFieldByType } from "./Utils";
-
-import { FormFieldProps } from "~/types/formFieldsProps";
-import TextFieldView, { defaultField as defaultTextField } from "./Fields/Text";
-import AddressFieldView, { defaultField as defaultAddressField } from "./Fields/Address";
-import NameFieldView, { defaultField as defaultNameField } from "./Fields/Name";
+import React from 'react';
+import { useSortable } from '@dnd-kit/sortable';
+import { useDroppable } from '@dnd-kit/core';
+import { CSS } from '@dnd-kit/utilities';
+import { FormFieldProps } from '~/types/formFieldProps';
+import { GripVertical } from 'lucide-react';
+import { getFieldView } from './Utils';
 
 interface FormPreviewProps {
-  initialFields: FormFieldProps[];
-  onFieldClick: (field: FormFieldProps) => void;
-  onFieldDrop: (type: string) => void;
+  fields: FormFieldProps[];
+  onSelectField: (field: FormFieldProps) => void;
 }
 
-export default function FormPreview({
-  initialFields,
-  onFieldClick,
-  onFieldDrop,
-}: FormPreviewProps) {
+const FormPreview: React.FC<FormPreviewProps> = ({ fields, onSelectField }) => {
+  const { setNodeRef } = useDroppable({
+    id: 'form-preview',
+  });
 
-  const [fields, setFields] = useState<FormFieldProps[]>(initialFields);
+  return (
+    <div className="w-full lg:w-1/2 m-4">
+      <div ref={setNodeRef} className="w-full bg-white p-4 shadow-lg rounded-lg min-h-screen">
+        <div className="space-y-4">
+          {fields.map((field) => (
+            <SortableField key={field.id} field={field} onSelect={onSelectField} />
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
 
-  const [, drop] = useDrop(() => ({
-    accept: "formField",
-    drop: (item: { type: string }) => {
-      onFieldDrop(item.type);
-    },
-  }));
+interface SortableFieldProps {
+  field: FormFieldProps;
+  onSelect: (field: FormFieldProps) => void;
+}
 
-  const renderField = (field: FormFieldProps) => {
-    switch (field.type) {
-      case "name":
-        return (
-          <NameFieldView field={field} />
-        );
-      case "text":
-        return (
-          <TextFieldView field={field} />
-        );
-      case "address":
-        return (
-          <AddressFieldView field={field} />
-        );
-      default:
-        return null;
-    }
+const SortableField: React.FC<SortableFieldProps> = ({ field, onSelect }) => {
+  const {
+    isDragging,
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+  } = useSortable({ id: field.id });
+
+  const style = {
+    transform: CSS.Transform.toString(transform),
+    transition,
   };
 
   return (
-    <div ref={drop} className="w-1/2 p-4 bg-white overflow-y-auto">
-      <h2 className="text-xl font-bold mb-4">Form Preview</h2>
-      {fields.length > 0 && fields.map((field) => (
-        <div
-          key={field.id}
-          className="p-4 mb-4 border rounded cursor-pointer hover:bg-gray-100"
-          onClick={() => onFieldClick(field)}
-        >
-          <h3 className="font-bold mb-2">{field.label}</h3>
-          {renderField(field)}
-        </div>
-      ))}
-      {fields.length === 0 && (
-        <p className="text-gray-500">
-          Drag and drop fields here to build your form.
-        </p>
-      )}
+    <div
+      className={`border border-gray-300 rounded-lg relative group shadow-sm hover:shadow-md transition-shadow duration-200 ${isDragging ? 'opacity-50' : 'opacity-100'}`}
+      style={style}
+      onClick={() => onSelect(field)}
+    >
+      <div
+        ref={setNodeRef}
+        {...attributes}
+        {...listeners}
+        className="absolute top-0 left-0 w-5 h-5 flex items-center justify-center cursor-move transition-colors rounded-tl-lg"
+        aria-label={`Drag handle for ${field.label} field`}
+      >
+        <GripVertical size={16} className="text-gray-500" />
+      </div>
+      <div className="p-4">
+        {getFieldView(field)}
+      </div>
     </div>
   );
-}
+};
+
+export default FormPreview;

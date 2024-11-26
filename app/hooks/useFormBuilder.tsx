@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FormFieldProps } from '../types/formFieldsProps';
+import { FormFieldProps } from '../types/formFieldProps';
 import { getNewFieldByType } from '../components/FormBuilder/Utils';
 
 
@@ -29,6 +29,7 @@ export function useFormBuilder() {
 
     return {
         formFields,
+        setFormFields,
         addField,
         updateField,
         removeField,
